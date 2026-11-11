@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio Quindío 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        /* Animación suave para las tarjetas */
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex h-screen overflow-hidden">
+
+    <!-- Sidebar Clean -->
+    <aside class="w-72 bg-white border-r border-gray-200 flex flex-col shadow-sm z-10">
+        <div class="p-8 border-b border-gray-100 flex flex-col items-center justify-center">
+            <!-- Espacio para el Logo de la U -->
+            <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center border border-gray-200 mb-4 shadow-inner">
+                <span class="text-[#01621B] font-bold text-2xl">UQ</span>
+                <!-- Si tienes el logo en imagen, cámbialo por: <img src="/static/img/logo-uq.png" class="w-16 h-16 object-contain"> -->
+            </div>
+            <h1 class="text-xl font-bold text-[#01621B] text-center">Portafolio de Inversión</h1>
+            <p class="text-sm text-gray-500 mt-1 text-center font-medium">Universidad del Quindío</p>
+        </div>
+        
+        <nav class="flex-1 p-6 space-y-2 text-sm font-medium">
+            <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {% if request.url.path == '/' %}bg-[#01621B]/10 text-[#01621B] font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-[#01621B]{% endif %}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                Portada
+            </a>
+            <a href="/precios" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {% if request.url.path == '/precios' %}bg-[#01621B]/10 text-[#01621B] font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-[#01621B]{% endif %}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+                Series Temporales
+            </a>
+            <a href="/rendimientos" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {% if request.url.path == '/rendimientos' %}bg-[#01621B]/10 text-[#01621B] font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-[#01621B]{% endif %}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                Rendimientos y Riesgo
+            </a>
+            <a href="/cov-cor" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {% if request.url.path == '/cov-cor' %}bg-[#01621B]/10 text-[#01621B] font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-[#01621B]{% endif %}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                Covarianza / Correlación
+            </a>
+            <a href="/frontera" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {% if request.url.path == '/frontera' %}bg-[#01621B]/10 text-[#01621B] font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-[#01621B]{% endif %}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                Frontera Eficiente
+            </a>
+        </nav>
+        <div class="p-6 border-t border-gray-100">
+            <p class="text-xs text-gray-400 text-center">© 2026 Universidad del Quindío</p>
+        </div>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="flex-1 p-10 overflow-y-auto bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-8">
+    <h2 class="text-3xl font-bold text-[#01621B] mb-2">Estructura de Riesgo</h2>
+    <p class="text-gray-500">Los mapas de calor muestran los patrones visuales. Las tablas inferiores contienen los valores exactos para análisis detallado.</p>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
+    <!-- Covarianza Visual -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <div class="mb-4">
+            <h3 class="text-lg font-bold text-gray-800">Mapa de Covarianza</h3>
+            <p class="text-xs text-gray-500 mt-1">Verde = mayor riesgo conjunto. Marrón/Gris = menor riesgo conjunto.</p>
+        </div>
+        <div id="chart-cov" style="height: 400px;"></div>
+    </div>
+
+    <!-- Correlación Visual -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <div class="mb-4">
+            <h3 class="text-lg font-bold text-gray-800">Mapa de Correlación</h3>
+            <p class="text-xs text-gray-500 mt-1">Verde = se mueven juntos (cerca de 1). Marrón = se mueven opuestos (cerca de -1). Gris = sin relación (cerca de 0).</p>
+        </div>
+        <div id="chart-corr" style="height: 400px;"></div>
+    </div>
+</div>
+
+<!-- Tablas de Datos Exactos -->
+<div class="grid grid-cols-1 gap-8">
+    
+    <!-- Tabla Covarianza -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100 bg-gray-50/50">
+            <h3 class="text-lg font-bold text-gray-800">Valores Exactos de Covarianza (%)</h3>
+            <p class="text-sm text-gray-500">Multiplicados por 100 para mejor lectura.</p>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+                    <tr>
+                        <th class="px-4 py-3 font-semibold">Activo</th>
+                        {% for a in activos %}
+                        <th class="px-4 py-3 font-semibold text-center">{{ a }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for i in range(activos|length) %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-4 py-3 font-medium text-gray-800">{{ activos[i] }}</td>
+                        {% for j in range(activos|length) %}
+                        <td class="px-4 py-3 text-center font-mono text-gray-600 {% if i == j %}bg-gray-100 font-bold text-[#01621B]{% endif %}">
+                            {{ "%.2f"|format(cov_matrix[i][j] * 100) }}%
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tabla Correlación -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100 bg-gray-50/50">
+            <h3 class="text-lg font-bold text-gray-800">Valores Exactos de Correlación</h3>
+            <p class="text-sm text-gray-500">Escala de -1 a 1.</p>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+                    <tr>
+                        <th class="px-4 py-3 font-semibold">Activo</th>
+                        {% for a in activos %}
+                        <th class="px-4 py-3 font-semibold text-center">{{ a }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for i in range(activos|length) %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-4 py-3 font-medium text-gray-800">{{ activos[i] }}</td>
+                        {% for j in range(activos|length) %}
+                        <td class="px-4 py-3 text-center font-mono text-gray-600 
+                            {% if i == j %}bg-gray-100 font-bold text-[#01621B]{% endif %}
+                            {% if i != j and corr_matrix[i][j] > 0.7 %}text-[#01621B] font-semibold{% endif %}
+                            {% if i != j and corr_matrix[i][j] < -0.3 %}text-[#BD936D] font-semibold{% endif %}">
+                            {{ "%.2f"|format(corr_matrix[i][j]) }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Insight -->
+<div class="mt-8 bg-[#01621B]/5 border border-[#01621B]/20 rounded-2xl p-6 flex items-start gap-4">
+    <div class="text-[#01621B] mt-1">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    </div>
+    <div>
+        <h4 class="font-bold text-[#01621B]">¿Cómo interpretar esto?</h4>
+        <p class="text-sm text-gray-600 mt-1">
+            En la tabla de correlación, los valores <strong>mayores a 0.70 se resaltan en verde</strong> (indican que los activos se mueven casi igual, lo cual no ayuda a diversificar). Los valores <strong>menores a -0.30 se resaltan en marrón</strong> (indican que se mueven en direcciones opuestas, lo cual es excelente para reducir el riesgo total).
+        </p>
+    </div>
+</div>
+
+<script>
+    const activos = {{ activos | tojson }};
+    const cov = {{ cov_matrix | tojson }};
+    const corr = {{ corr_matrix | tojson }};
+
+    const layoutBase = {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        font: { color: '#374151', family: 'Inter, sans-serif' },
+        margin: { t: 10, l: 100, r: 20, b: 100 }
+    };
+
+    // Heatmap Covarianza (Solo colores, sin números)
+    Plotly.newPlot('chart-cov', [{
+        z: cov.map(row => row.map(v => v * 100)), // Escalar para el color
+        x: activos,
+        y: activos,
+        type: 'heatmap',
+        colorscale: [[0, '#F3F4F6'], [0.5, '#BD936D'], [1, '#01621B']],
+        showscale: false, // Ocultar barra de escala
+        hoverongaps: false,
+        hovertemplate: '%{y} - %{x}<br>Covarianza: %{z:.2f}%<extra></extra>'
+    }], {
+        ...layoutBase,
+        xaxis: { tickangle: -45, tickfont: { size: 11, color: '#4B5563' } },
+        yaxis: { tickfont: { size: 11, color: '#4B5563' } }
+    }, { responsive: true, displayModeBar: false });
+
+    // Heatmap Correlación (Solo colores, sin números)
+    Plotly.newPlot('chart-corr', [{
+        z: corr,
+        x: activos,
+        y: activos,
+        type: 'heatmap',
+        colorscale: [[0, '#BD936D'], [0.5, '#F3F4F6'], [1, '#01621B']],
+        zmin: -1,
+        zmax: 1,
+        showscale: false, // Ocultar barra de escala
+        hoverongaps: false,
+        hovertemplate: '%{y} - %{x}<br>Correlación: %{z:.2f}<extra></extra>'
+    }], {
+        ...layoutBase,
+        xaxis: { tickangle: -45, tickfont: { size: 11, color: '#4B5563' } },
+        yaxis: { tickfont: { size: 11, color: '#4B5563' } }
+    }, { responsive: true, displayModeBar: false });
+</script>
+{% endblock %}

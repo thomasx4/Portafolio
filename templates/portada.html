@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[80vh]">
+    <!-- Etiqueta -->
+    <span class="bg-[#01621B]/10 text-[#01621B] px-4 py-1.5 rounded-full text-sm font-semibold tracking-wide mb-6">
+        Diplomado en Portafolios de Inversión
+    </span>
+
+    <!-- Título -->
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 text-center leading-tight mb-4 max-w-3xl">
+        Construcción de un Portafolio de Inversión
+    </h1>
+    <h2 class="text-xl md:text-2xl text-gray-500 text-center mb-10 max-w-2xl font-light">
+        Modelo de Media-Varianza con Activos Nacionales e Internacionales
+    </h2>
+
+    <h2 class="text-xl md:text-2xl text-gray-500 text-center mb-10 max-w-2xl font-light">
+        Universidad del Quindio | 2026
+    </h2>
+
+    <!-- Tarjeta de Autores -->
+    <div class="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 p-8 w-full max-w-4xl">
+        <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest text-center mb-6">Presentado por</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-gray-100 card-hover">
+                <div class="w-10 h-10 rounded-full bg-[#01621B] flex items-center justify-center text-white font-bold">JL</div>
+                <span class="font-medium text-gray-700">Juliana Londoño Trujillo</span>
+            </div>
+            <div class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-gray-100 card-hover">
+                <div class="w-10 h-10 rounded-full bg-[#01621B] flex items-center justify-center text-white font-bold">MZ</div>
+                <span class="font-medium text-gray-700">María Camila Zamudio Rodríguez</span>
+            </div>
+            <div class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-gray-100 card-hover">
+                <div class="w-10 h-10 rounded-full bg-[#BD936D] flex items-center justify-center text-white font-bold">AR</div>
+                <span class="font-medium text-gray-700">Alejandra Román Bolaños</span>
+            </div>
+            <div class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-gray-100 card-hover">
+                <div class="w-10 h-10 rounded-full bg-[#BD936D] flex items-center justify-center text-white font-bold">YC</div>
+                <span class="font-medium text-gray-700">Yamid Alejandro Cárdenas Osorio</span>
+            </div>
+        </div>
+
+        <div class="mt-8 flex justify-center">
+            <a href="/precios" class="inline-flex items-center gap-2 px-8 py-3.5 bg-[#01621B] hover:bg-[#014514] text-white font-semibold rounded-xl transition-all shadow-lg shadow-[#01621B]/30 hover:shadow-[#01621B]/50">
+                Explorar el Portafolio
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
